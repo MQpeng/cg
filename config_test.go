@@ -7,6 +7,7 @@ import (
 )
 
 func getPath() (string, string, string){
+    InitConfig()
     homeDir, _ := os.UserHomeDir()
     baseDir := filepath.Join(homeDir, AppName)
     defaultTemplatePath := filepath.Join(baseDir, TemplateDir)
