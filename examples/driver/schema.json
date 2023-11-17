@@ -1,0 +1,22 @@
+{
+    "name": "base",
+    "alias": [
+        "b"
+    ],
+    "description": "cg example",
+    "flags": [
+        {
+            "name": "name",
+            "alias": [
+                "n"
+            ],
+            "require": true,
+            "description": "the var name"
+        },
+        {
+            "name": "age",
+            "default": "12",
+            "description": "the var age"
+        }
+    ]
+}

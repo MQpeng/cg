@@ -8,12 +8,16 @@ import (
 
 // AppName cg
 const AppName string = ".cg"
+
 // TemplateDir is a dir name for template
 const TemplateDir string = "templates"
+
 // ConfigName is the name of config.json
 const ConfigName string = AppName + "-config.json"
+
 // SchemaName is the template schema file name
 const SchemaName string = "schema.json"
+
 // Version tag app version. [be replaced by CI]
 var Version string = "unknown"
 
@@ -23,22 +27,26 @@ type Config struct {
 	FileNameTag  string `json:"fileNameTag"`
 	FileStartTag string `json:"fileStartTag"`
 	FileEndTag   string `json:"fileEndTag"`
-	Version string `json:"version"`
+	Driver       string `json:"driver"`
+	Version      string `json:"version"`
 }
 
 // Schema schema.json
 type Schema struct {
 	Name        string   `json:"name"`
-	Aliases     []string   `json:"aliases"`
+	Aliases     []string `json:"aliases"`
 	Description string   `json:"description"`
-	Flags       []Flag    `json:"flags"`
+	Driver      string   `json:"driver"`
+	FileStartTag string `json:"fileStartTag"`
+	FileEndTag   string `json:"fileEndTag"`
+	Flags       []Flag   `json:"flags"`
 }
 
 // Flag flag
 type Flag struct {
 	Name        string   `json:"name"`
 	Default     string   `json:"default"`
-	Aliases     []string   `json:"aliases"`
+	Aliases     []string `json:"aliases"`
 	Regex       string   `json:"regex"`
 	Description string   `json:"description"`
 	Options     []string `json:"options"`
@@ -58,7 +66,7 @@ func GetConfig() *Config {
 }
 
 // GetConfigMap get config map
-func GetConfigMap() (map[string]interface{}, error){
+func GetConfigMap() (map[string]interface{}, error) {
 	if configMap != nil {
 		return configMap, nil
 	}
@@ -126,7 +134,7 @@ func InitConfig() *Config {
 			FileNameTag:  "__",
 			FileStartTag: "{{",
 			FileEndTag:   "}}",
-			Version: Version,
+			Version:      Version,
 		}
 		WriteConfig(&config, configPath)
 		return &config
@@ -168,7 +176,7 @@ func ReadSchema(path string) (*Schema, error) {
 }
 
 // WriteConfigDefault writes default config
-func WriteConfigDefault(config *Config){
+func WriteConfigDefault(config *Config) {
 	_, configPath := GetPath()
 	WriteConfig(config, configPath)
 }

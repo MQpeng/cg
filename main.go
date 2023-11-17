@@ -72,7 +72,7 @@ func main() {
 					}
 					path = dir
 				}
-				return Generate(path, fileName, data)
+				return Generate(path, fileName, data, schema)
 			},
 		})
 	}
@@ -126,6 +126,18 @@ func main() {
 						return nil
 					}
 					return Add(filepath.Join(path), cCtx.Args().Get(1))
+				},
+			},
+			{
+				Name:    "remove",
+				Aliases: []string{"rm"},
+				Usage:   "remove a template dir",
+				Action: func(cCtx *cli.Context) error {
+					name := cCtx.Args().First()
+					if name == "" {
+						return fmt.Errorf("must provider a template name")
+					}
+					return Remove(name)
 				},
 			},
 			{

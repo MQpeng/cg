@@ -7,7 +7,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/valyala/fasttemplate"
 )
@@ -27,6 +26,12 @@ func Add(fromPath, toName string) error {
 	}
 	fmt.Printf("add template [%s] as %s\n", fromPath, toName)
 	return CopyDir(fromPath, filepath.Join(config.TemplatePath, toName))
+}
+
+// Remove remove a template
+func Remove(name string) error {
+	config := GetConfig()
+	return os.RemoveAll(filepath.Join(config.TemplatePath, name))
 }
 
 // GetTemplateList get all template list
@@ -82,7 +87,7 @@ func GetSchemas(name string) (*Schema, error) {
 }
 
 // Generate generates code by template
-func Generate(toPath, name string, data map[string]interface{}) error {
+func Generate(toPath, name string, data map[string]interface{}, driver *Schema) error {
 	config := GetConfig()
 	fromPath := filepath.Join(config.TemplatePath, name)
 	if !CheckPathExists(fromPath) {
@@ -101,8 +106,16 @@ func Generate(toPath, name string, data map[string]interface{}) error {
 				break
 			}
 		}
-		t := fasttemplate.New(content, config.FileStartTag, config.FileEndTag)
-		return io.Copy(dst, strings.NewReader(t.ExecuteString(data)))
+
+		switch driver.Driver {
+		case "text/template":
+			return io.Copy(dst, TextTemplate(content, data, config))
+		case "fasttemplate":
+			return io.Copy(dst, FastTemplate(content, data, config))
+		default:
+			return io.Copy(dst, FastTemplate(content, data, config))
+		}
+
 	}, func(path string) bool {
 		return path == SchemaFileName
 	})

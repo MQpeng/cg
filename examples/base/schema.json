@@ -1,9 +1,10 @@
 {
-    "name": "example",
+    "name": "base",
     "alias": [
-        "e"
+        "b"
     ],
     "description": "cg example",
+    "driver": "text/template",
     "flags": [
         {
             "name": "name",

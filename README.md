@@ -6,15 +6,16 @@ A code generator
 
 1. Add `template`
 ```shell
+cd examples
 # add a template to user path
-cg add example
+cg add base
 # as new name
-cg add example test
+cg add base test
 ```
 2. Use `Template`
 ```shell
 # use template to generate
-cg g example --name Tom --age 12
+cg g base --name Tom --age 12
 cg g test --name Job --age 44
 ```
 
