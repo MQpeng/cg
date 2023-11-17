@@ -15,12 +15,15 @@ const ConfigName string = AppName + "-config.json"
 // SchemaName is the template schema file name
 const SchemaName string = "schema.json"
 
+var Version string = "unknown"
+
 // Config config.json
 type Config struct {
 	TemplatePath string `json:"templatePath"`
 	FileNameTag  string `json:"fileNameTag"`
 	FileStartTag string `json:"fileStartTag"`
 	FileEndTag   string `json:"fileEndTag"`
+	Version string `json:"version"`
 }
 
 // Schema schema.json
@@ -79,6 +82,7 @@ func InitConfig() *Config {
 			FileNameTag:  "__",
 			FileStartTag: "{{",
 			FileEndTag:   "}}",
+			Version: Version,
 		}
 		WriteConfig(&config, configPath)
 		return &config
