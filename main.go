@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"reflect"
 	"regexp"
@@ -105,7 +106,42 @@ func main() {
 				Aliases: []string{"a"},
 				Usage:   "add a template dir",
 				Action: func(cCtx *cli.Context) error {
-					return Add(filepath.Join(cCtx.Args().First()), cCtx.Args().Get(1))
+					path := cCtx.Args().First()
+					if path == "" {
+						dir, err := os.Getwd()
+						if err != nil {
+							return err
+						}
+						de, err := os.ReadDir(dir)
+						if err != nil {
+							return err
+						}
+						for _, d := range de {
+							Add(filepath.Join(dir, d.Name()), "")
+						}
+						return nil
+					}
+					return Add(filepath.Join(path), cCtx.Args().Get(1))
+				},
+			},
+			{
+				Name:    "clone",
+				Aliases: []string{"c"},
+				Usage:   "git clone repo to template",
+				Action: func(cCtx *cli.Context) error {
+					clone := exec.Command("git", "clone", cCtx.Args().First(), config.TemplatePath)
+					clone.Stdout = os.Stdout
+					return clone.Run()
+				},
+			},
+			{
+				Name:    "pull",
+				Aliases: []string{"c"},
+				Usage:   "git clone repo to template",
+				Action: func(cCtx *cli.Context) error {
+					pull := exec.Command("git", "-C", config.TemplatePath, "pull")
+					pull.Stdout = os.Stdout
+					return pull.Run()
 				},
 			},
 			{

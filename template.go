@@ -25,6 +25,7 @@ func Add(fromPath, toName string) error {
 	if toName == "" {
 		toName = filepath.Base(fromPath)
 	}
+	fmt.Printf("add template [%s] as %s\n", fromPath, toName)
 	return CopyDir(fromPath, filepath.Join(config.TemplatePath, toName))
 }
 
@@ -38,6 +39,10 @@ func GetTemplateList() ([]string, error) {
 	var list []string
 	for _, file := range dir {
 		if file.IsDir() {
+			schemaExist := CheckPathExists(filepath.Join(config.TemplatePath, file.Name(), SchemaFileName))
+			if !schemaExist {
+				continue
+			}
 			list = append(list, file.Name())
 		}
 	}
