@@ -27,3 +27,11 @@ jobs:
 
       - name: Test
         run: go test -v ./...
+      
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: cg
+          path: |
+            cg
+            cg.exe
