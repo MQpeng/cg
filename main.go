@@ -77,7 +77,7 @@ func main() {
 	var getCommand []*cli.Command
 	for i := 0; i < fields.NumField(); i++ {
 		field := fields.Field(i)
-		fieldName := field.Name
+		fieldName := field.Tag.Get("json")
 		setCommand = append(setCommand, &cli.Command{
 			Name:  fieldName,
 			Usage: fmt.Sprintf("set config [%s]", fieldName),
@@ -85,7 +85,7 @@ func main() {
 				return SetConfigItem(fieldName, ctx.Args().First())
 			},
 		})
-		getCommand = append(setCommand, &cli.Command{
+		getCommand = append(getCommand, &cli.Command{
 			Name:  fieldName,
 			Usage: fmt.Sprintf("get config [%s]", fieldName),
 			Action: func(ctx *cli.Context) error {
@@ -93,7 +93,7 @@ func main() {
 				if err != nil {
 					return err
 				}
-				fmt.Printf("[%s]:[%s]", fieldName, val)
+				fmt.Printf("[%s]:%v", fieldName, val)
 				return nil
 			},
 		})

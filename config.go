@@ -68,7 +68,7 @@ func GetConfigMap() (map[string]interface{}, error){
 		return nil, err
 	}
 
-	err = json.Unmarshal(jsonData, configMap)
+	err = json.Unmarshal(jsonData, &configMap)
 	if err != nil {
 		return nil, err
 	}
@@ -82,12 +82,13 @@ func ConfigMapInstance(configMap map[string]interface{}) (*Config, error) {
 		return nil, err
 	}
 
+	var config Config
 	err = json.Unmarshal(jsonData, &config)
 	if err != nil {
 		return nil, err
 	}
 
-	return config, nil
+	return &config, nil
 }
 
 // GetSchemaPath get schema path
