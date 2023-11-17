@@ -72,7 +72,7 @@ func main() {
 		})
 	}
 	// build config set & get command
-	fields := reflect.TypeOf(&config)
+	fields := reflect.TypeOf(*config)
 	var setCommand []*cli.Command
 	var getCommand []*cli.Command
 	for i := 0; i < fields.NumField(); i++ {
