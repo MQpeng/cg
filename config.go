@@ -14,7 +14,7 @@ const TemplateDir string = "templates"
 const ConfigName string = AppName + "-config.json"
 // SchemaName is the template schema file name
 const SchemaName string = "schema.json"
-
+// Version tag app version. [be replaced by CI]
 var Version string = "unknown"
 
 // Config config.json
@@ -46,7 +46,9 @@ type Flag struct {
 }
 
 var config *Config
+var configMap map[string]interface{}
 
+// GetConfig get config
 func GetConfig() *Config {
 	if config != nil {
 		return config
@@ -55,12 +57,47 @@ func GetConfig() *Config {
 	return config
 }
 
+// GetConfigMap get config map
+func GetConfigMap() (map[string]interface{}, error){
+	if configMap != nil {
+		return configMap, nil
+	}
+	config := GetConfig()
+	jsonData, err := json.Marshal(config)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(jsonData, configMap)
+	if err != nil {
+		return nil, err
+	}
+	return configMap, nil
+}
+
+// ConfigMapInstance build config by configMap
+func ConfigMapInstance(configMap map[string]interface{}) (*Config, error) {
+	jsonData, err := json.Marshal(configMap)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(jsonData, &config)
+	if err != nil {
+		return nil, err
+	}
+
+	return config, nil
+}
+
+// GetSchemaPath get schema path
 func GetSchemaPath(templateName string) string {
 	config := GetConfig()
 	return filepath.Join(config.TemplatePath, templateName, SchemaName)
 }
 
-func InitConfig() *Config {
+// GetPath get common path
+func GetPath() (string, string) {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		panic(err)
@@ -71,9 +108,15 @@ func InitConfig() *Config {
 		panic(err)
 	}
 	configPath := filepath.Join(baseDir, ConfigName)
+	return baseDir, configPath
+}
+
+// InitConfig init config
+func InitConfig() *Config {
+	baseDir, configPath := GetPath()
 	isConfigExist := CheckPathExists(configPath)
 	if !isConfigExist {
-		err = os.Mkdir(filepath.Join(baseDir, TemplateDir), 0755)
+		err := os.Mkdir(filepath.Join(baseDir, TemplateDir), 0755)
 		if err != nil {
 			panic(err)
 		}
@@ -94,6 +137,7 @@ func InitConfig() *Config {
 	return config
 }
 
+// ReadConfig read config by path
 func ReadConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -107,6 +151,7 @@ func ReadConfig(path string) (*Config, error) {
 	return &config, nil
 }
 
+// ReadSchema read schema by path
 func ReadSchema(path string) (*Schema, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -121,10 +166,41 @@ func ReadSchema(path string) (*Schema, error) {
 	return &schemas, nil
 }
 
+// WriteConfigDefault writes default config
+func WriteConfigDefault(config *Config){
+	_, configPath := GetPath()
+	WriteConfig(config, configPath)
+}
+
+// WriteConfig writes config by path
 func WriteConfig(config *Config, path string) error {
 	data, err := json.Marshal(&config)
 	if err != nil {
 		return err
 	}
 	return os.WriteFile(path, data, 0644)
+}
+
+// SetConfigItem set config
+func SetConfigItem(key string, value interface{}) error {
+	configMap, err := GetConfigMap()
+	if err != nil {
+		return err
+	}
+	configMap[key] = value
+	config, err := ConfigMapInstance(configMap)
+	if err != nil {
+		return err
+	}
+	_, configPath := GetPath()
+	return WriteConfig(config, configPath)
+}
+
+// GetConfigItem get config by key
+func GetConfigItem(key string) (interface{}, error) {
+	configMap, err := GetConfigMap()
+	if err != nil {
+		return nil, err
+	}
+	return configMap[key], nil
 }
