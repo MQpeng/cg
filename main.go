@@ -20,7 +20,9 @@ func main() {
 		log.Fatal(err)
 	}
 	var command []*cli.Command
-	for fileName, schema := range schemas {
+	for fn, item := range schemas {
+		fileName := fn
+		schema := item
 		name := schema.Name
 		if name == "" {
 			name = fileName
@@ -47,18 +49,20 @@ func main() {
 			Action: func(cCtx *cli.Context) error {
 				data := make(map[string]interface{})
 				for _, v := range schema.Flags {
-					val := cCtx.String(v.Name)
+					name := v.Name
+					regex := v.Regex
+					val := cCtx.String(name)
 					if v.Require && val == "" {
-						return fmt.Errorf("require for flag: [%s]", v.Name)
+						return fmt.Errorf("require for flag: [%s]", name)
 					}
-					if v.Regex != "" {
-						re := regexp.MustCompile(v.Regex)
+					if regex != "" {
+						re := regexp.MustCompile(regex)
 						isMatch := re.Match([]byte(val))
 						if !isMatch {
-							return fmt.Errorf("flag: [%s] must match the regex [%s]", v.Name, v.Regex)
+							return fmt.Errorf("flag: [%s] must match the regex [%s]", name, regex)
 						}
 					}
-					data[v.Name] = val
+					data[name] = val
 				}
 				path := cCtx.String("path")
 				if path == "" {
@@ -136,8 +140,17 @@ func main() {
 			},
 			{
 				Name:    "pull",
-				Aliases: []string{"c"},
-				Usage:   "git clone repo to template",
+				Aliases: []string{"p"},
+				Usage:   "git pull repo to template",
+				Action: func(cCtx *cli.Context) error {
+					pull := exec.Command("git", "-C", config.TemplatePath, "pull")
+					pull.Stdout = os.Stdout
+					return pull.Run()
+				},
+			},
+			{
+				Name:  "git",
+				Usage: "git clone repo to template",
 				Action: func(cCtx *cli.Context) error {
 					pull := exec.Command("git", "-C", config.TemplatePath, "pull")
 					pull.Stdout = os.Stdout
