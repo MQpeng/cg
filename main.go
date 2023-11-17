@@ -130,7 +130,6 @@ func main() {
 			},
 			{
 				Name:    "clone",
-				Aliases: []string{"c"},
 				Usage:   "git clone repo to template",
 				Action: func(cCtx *cli.Context) error {
 					clone := exec.Command("git", "clone", cCtx.Args().First(), config.TemplatePath)
@@ -140,17 +139,7 @@ func main() {
 			},
 			{
 				Name:    "pull",
-				Aliases: []string{"p"},
 				Usage:   "git pull repo to template",
-				Action: func(cCtx *cli.Context) error {
-					pull := exec.Command("git", "-C", config.TemplatePath, "pull")
-					pull.Stdout = os.Stdout
-					return pull.Run()
-				},
-			},
-			{
-				Name:  "git",
-				Usage: "git clone repo to template",
 				Action: func(cCtx *cli.Context) error {
 					pull := exec.Command("git", "-C", config.TemplatePath, "pull")
 					pull.Stdout = os.Stdout
