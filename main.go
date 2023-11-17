@@ -20,9 +20,9 @@ func main() {
 		log.Fatal(err)
 	}
 	var command []*cli.Command
-	for fn, item := range schemas {
-		fileName := fn
-		schema := item
+	for key, value := range schemas {
+		fileName := key
+		schema := value
 		name := schema.Name
 		if name == "" {
 			name = fileName
