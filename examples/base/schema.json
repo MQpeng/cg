@@ -4,7 +4,7 @@
         "b"
     ],
     "description": "cg example",
-    "driver": "text/template",
+    "driver": "tfasttemplate",
     "flags": [
         {
             "name": "name",

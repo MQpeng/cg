@@ -1,17 +1,18 @@
 {
-    "name": "base",
+    "name": "driver",
     "alias": [
-        "b"
+        "d"
     ],
     "description": "cg example",
+    "driver": "text/template",
     "flags": [
         {
-            "name": "name",
+            "name": "output",
             "alias": [
-                "n"
+                "o"
             ],
             "require": true,
-            "description": "the var name"
+            "description": "the var output"
         },
         {
             "name": "age",
