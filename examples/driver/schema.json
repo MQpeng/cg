@@ -18,6 +18,11 @@
             "name": "age",
             "default": "12",
             "description": "the var age"
+        },{
+            "name": "list",
+            "type": "raw",
+            "default": "[\"123\",\"456\",\"789\"]",
+            "description": "the var age"
         }
     ]
 }

@@ -33,19 +33,20 @@ type Config struct {
 
 // Schema schema.json
 type Schema struct {
-	Name        string   `json:"name"`
-	Aliases     []string `json:"aliases"`
-	Description string   `json:"description"`
-	Driver      string   `json:"driver"`
-	FileStartTag string `json:"fileStartTag"`
-	FileEndTag   string `json:"fileEndTag"`
-	Flags       []Flag   `json:"flags"`
+	Name         string   `json:"name"`
+	Aliases      []string `json:"aliases"`
+	Description  string   `json:"description"`
+	Driver       string   `json:"driver"`
+	FileStartTag string   `json:"fileStartTag"`
+	FileEndTag   string   `json:"fileEndTag"`
+	Flags        []Flag   `json:"flags"`
 }
 
 // Flag flag
 type Flag struct {
 	Name        string   `json:"name"`
 	Default     string   `json:"default"`
+	Type        string   `json:"type"`
 	Aliases     []string `json:"aliases"`
 	Regex       string   `json:"regex"`
 	Description string   `json:"description"`

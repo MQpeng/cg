@@ -62,6 +62,15 @@ func main() {
 							return fmt.Errorf("flag: [%s] must match the regex [%s]", name, regex)
 						}
 					}
+					if v.Type == "raw" {
+						var rawData interface{}
+						err := json.Unmarshal([]byte(val), &rawData)
+						if err != nil {
+							return err
+						}
+						data[name] = rawData
+						continue
+					}
 					data[name] = val
 				}
 				path := cCtx.String("path")
