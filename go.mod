@@ -1,6 +1,6 @@
 module github.com/mqpeng/cg
 
-go 1.21
+go 1.20
 
 require (
 	github.com/getkin/kin-openapi v0.121.0
