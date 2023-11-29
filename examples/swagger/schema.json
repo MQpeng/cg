@@ -1,0 +1,24 @@
+{
+    "name": "driver",
+    "alias": [
+        "d"
+    ],
+    "description": "cg example",
+    "driver": "text/template",
+    "flags": [
+        {
+            "name": "output",
+            "alias": [
+                "o"
+            ],
+            "require": true,
+            "description": "the var output"
+        },
+        {
+            "name": "swagger",
+            "type": "url",
+            "default": "http://localhost:8003/openapi.json",
+            "description": "the repeat age"
+        }
+    ]
+}

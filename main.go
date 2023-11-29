@@ -10,6 +10,7 @@ import (
 	"reflect"
 	"regexp"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/urfave/cli/v2"
 )
 
@@ -62,13 +63,34 @@ func main() {
 							return fmt.Errorf("flag: [%s] must match the regex [%s]", name, regex)
 						}
 					}
-					if v.Type == "raw" {
+					switch v.Type {
+					case "raw":
 						var rawData interface{}
 						err := json.Unmarshal([]byte(val), &rawData)
 						if err != nil {
 							return err
 						}
 						data[name] = rawData
+						continue
+					case "url":
+						var rawData interface{}
+						err := Request(val, &rawData)
+						if err != nil {
+							return err
+						}
+						data[name] = rawData
+						continue
+					case "openAPI":
+						url, err := CheckURL(val)
+						if err != nil {
+							return err
+						}
+						loader := openapi3.NewLoader()
+						result, err := loader.LoadFromURI(url)
+						if err != nil {
+							return err
+						}
+						data[name] = result
 						continue
 					}
 					data[name] = val
