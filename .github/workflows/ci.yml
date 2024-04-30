@@ -11,7 +11,23 @@ env:
   PR_PROMPT: "::warning:: Build artifact will not be uploaded due to the workflow is trigged by pull request."
 
 jobs:
+  publish:
+    name: Publish npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - run: npm install
+      - run: npm run version
+      - run: npm run build
+      - run: cd npm/cg && npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
   build:
+    needs: publish
     name: Build binary CI
     runs-on: ubuntu-latest
     strategy:
@@ -63,24 +79,6 @@ jobs:
         with:
           name: ${{ matrix.goos }}_${{ matrix.goarch }}
           path: output/
-  publish:
-    name: Publish npm
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup Node environment
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14
-          registry-url: https://registry.npmjs.org/
-      - name: Publish cg
-        run: |
-          ls
-          npm run version
-          npm run build
-          cd npm/cg
-          npm publish --access public
+
 
 

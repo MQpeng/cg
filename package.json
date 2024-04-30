@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "version": "node ./scripts/esbuild.js npm/cg/package.json --version",
+    "version": "node ./scripts/esbuild.js ./npm/cg/package.json --version",
     "build": "node ./scripts/esbuild.js ./node_modules/.bin/esbuild --neutral"
   },
   "dependencies": {
