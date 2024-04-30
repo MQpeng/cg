@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"io"
 	"os/exec"
 	"path/filepath"
 	"reflect"
@@ -67,6 +68,24 @@ func main() {
 					case "raw":
 						var rawData interface{}
 						err := json.Unmarshal([]byte(val), &rawData)
+						if err != nil {
+							return err
+						}
+						data[name] = rawData
+						continue
+					case "json":
+						file, err := os.Open(val)
+						if err != nil {
+							return err
+						}
+						defer file.Close();
+
+						jsonBytes, err := io.ReadAll(file)
+						if err != nil {
+							return err
+						}
+						var rawData interface{}
+						err := json.Unmarshal(jsonBytes, &rawData)
 						if err != nil {
 							return err
 						}
