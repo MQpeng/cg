@@ -85,7 +85,7 @@ func main() {
 							return err
 						}
 						var rawData interface{}
-						err := json.Unmarshal(jsonBytes, &rawData)
+						err = json.Unmarshal(jsonBytes, &rawData)
 						if err != nil {
 							return err
 						}
