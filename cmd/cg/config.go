@@ -19,7 +19,7 @@ const ConfigName string = AppName + "-config.json"
 const SchemaName string = "schema.json"
 
 // Version tag app version. [be replaced by CI]
-var Version string = "unknown"
+const Version string = "unknown"
 
 // Config config.json
 type Config struct {
