@@ -1,0 +1,30 @@
+{
+  "name": "@tonyer/cg",
+  "private": false,
+  "version": "0.0.7",
+  "description": "A fast text/code generator",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MQpeng/cg.git"
+  },
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "bin": {
+    "cg": "bin/cg"
+  },
+  "optionalDependencies": {
+    "@tonyer/cg-darwin-amd64": "0.0.7",
+    "@tonyer/cg-darwin-arm64": "0.0.7",
+    "@tonyer/cg-linux-386": "0.0.7",
+    "@tonyer/cg-linux-amd64": "0.0.7",
+    "@tonyer/cg-linux-arm64": "0.0.7",
+    "@tonyer/cg-win32-386": "0.0.7",
+    "@tonyer/cg-win32-amd64": "0.0.7",
+    "@tonyer/cg-win32-arm64": "0.0.7"
+  },
+  "license": "MIT"
+}
