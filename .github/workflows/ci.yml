@@ -69,7 +69,7 @@ jobs:
           export LD_FLAGS="-w -s -X main.Version=${CG_VERSION}"
           go build -o "output/$BINARY_NAME" -trimpath -ldflags "$LD_FLAGS" ./cmd/cg
           mkdir ./npm/@cg/$GOOS-$GOARCH/bin
-          cp output/$BINARY_NAME ./npm/@cg/$GOOS-$GOARCH/bin/
+          if [ $GOOS = "windows" ]; then cp output/$BINARY_NAME ./npm/@cg/$GOOS-$GOARCH/; else cp output/$BINARY_NAME ./npm/@cg/$GOOS-$GOARCH/bin/; fi
           node scripts/esbuild.js npm/@cg/$GOOS-$GOARCH/package.json --version
           cd ./npm/@cg/$GOOS-$GOARCH
           npm publish --access public
