@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"os"
-	"io"
 	"os/exec"
 	"path/filepath"
 	"reflect"
@@ -78,7 +78,7 @@ func main() {
 						if err != nil {
 							return err
 						}
-						defer file.Close();
+						defer file.Close()
 
 						jsonBytes, err := io.ReadAll(file)
 						if err != nil {
@@ -191,8 +191,8 @@ func main() {
 				},
 			},
 			{
-				Name:    "clone",
-				Usage:   "git clone repo to template",
+				Name:  "clone",
+				Usage: "git clone repo to template",
 				Action: func(cCtx *cli.Context) error {
 					clone := exec.Command("git", "clone", cCtx.Args().First(), config.TemplatePath)
 					clone.Stdout = os.Stdout
@@ -200,8 +200,8 @@ func main() {
 				},
 			},
 			{
-				Name:    "pull",
-				Usage:   "git pull repo to template",
+				Name:  "pull",
+				Usage: "git pull repo to template",
 				Action: func(cCtx *cli.Context) error {
 					pull := exec.Command("git", "-C", config.TemplatePath, "pull")
 					pull.Stdout = os.Stdout
@@ -260,6 +260,7 @@ func main() {
 				Subcommands: command,
 			},
 		},
+		Version: Version,
 	}
 
 	if err := app.Run(os.Args); err != nil {

@@ -10,7 +10,7 @@ import child_process = require('child_process')
 const MODULE_NAME = '@tonyer/cg'
 
 const versionFromPackageJSON: string = require(path.join(__dirname, 'package.json')).version
-const toPath = path.join(__dirname, 'bin', MODULE_NAME)
+const toPath = path.join(__dirname, 'bin', "cg")
 let isToPathJS = true
 
 function validateBinaryVersion(...command: string[]): void {
@@ -49,7 +49,7 @@ which means the "@tonyer/cg" binary executable can't be run. You can either:
     }
     throw err
   }
-  if (stdout !== versionFromPackageJSON) {
+  if (stdout.indexOf(versionFromPackageJSON) === -1) {
     throw new Error(`Expected ${JSON.stringify(versionFromPackageJSON)} but got ${JSON.stringify(stdout)}`)
   }
 }
