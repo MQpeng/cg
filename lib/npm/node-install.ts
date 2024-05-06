@@ -7,8 +7,10 @@ import zlib = require('zlib')
 import https = require('https')
 import child_process = require('child_process')
 
+const MODULE_NAME = '@tonyer/cg'
+
 const versionFromPackageJSON: string = require(path.join(__dirname, 'package.json')).version
-const toPath = path.join(__dirname, 'bin', 'cg')
+const toPath = path.join(__dirname, 'bin', MODULE_NAME)
 let isToPathJS = true
 
 function validateBinaryVersion(...command: string[]): void {
@@ -36,14 +38,13 @@ function validateBinaryVersion(...command: string[]): void {
         os = 'macOS ' + child_process.execFileSync('sw_vers', ['-productVersion']).toString().trim()
       } catch {
       }
-      throw new Error(`The "cg" package cannot be installed because ${os} is too outdated.
+      throw new Error(`The "@tonyer/cg" package cannot be installed because ${os} is too outdated.
 
-The Go compiler (which cg relies on) no longer supports ${os},
-which means the "cg" binary executable can't be run. You can either:
+The Go compiler (which @tonyer/cg relies on) no longer supports ${os},
+which means the "@tonyer/cg" binary executable can't be run. You can either:
 
   * Update your version of macOS to one that the Go compiler supports
-  * Use the "cg-wasm" package instead of the "cg" package
-  * Build cg yourself using an older version of the Go compiler
+  * Build @tonyer/cg yourself using an older version of the Go compiler
 `)
     }
     throw err
@@ -104,7 +105,7 @@ function installUsingNPM(pkg: string, subpath: string, binPath: string): void {
 
   // Create a temporary directory inside the "cg" package with an empty
   // "package.json" file. We'll use this to run "npm install" in.
-  const cgLibDir = path.dirname(require.resolve('cg'))
+  const cgLibDir = path.dirname(require.resolve(MODULE_NAME))
   const installDir = path.join(cgLibDir, 'npm-install')
   fs.mkdirSync(installDir)
   try {
