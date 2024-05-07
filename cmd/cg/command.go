@@ -275,7 +275,7 @@ func BuildGenerateCmd() cli.Command {
 			if dataStr != "" {
 				json.Unmarshal([]byte(dataStr), &data)
 			}
-			return Generate(toPath, templatePath, data, nil)
+			return GenerateByPath(toPath, templatePath, data, nil)
 		},
 	}
 }
