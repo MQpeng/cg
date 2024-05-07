@@ -245,9 +245,8 @@ func BuildGenerateCmd() cli.Command {
 		Subcommands: command,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:     "template",
-				Required: true,
-				Usage:    "the path of template dir",
+				Name:  "template",
+				Usage: "the path of template dir",
 			},
 			&cli.StringFlag{
 				Name:  "path",
@@ -260,6 +259,9 @@ func BuildGenerateCmd() cli.Command {
 		},
 		Action: func(ctx *cli.Context) error {
 			templatePath := ctx.String("template")
+			if templatePath == "" {
+				return fmt.Errorf("flag: [%s] is required", "template")
+			}
 			toPath := ctx.String("path")
 			if toPath == "" {
 				dir, err := os.Getwd()
@@ -273,8 +275,7 @@ func BuildGenerateCmd() cli.Command {
 			if dataStr != "" {
 				json.Unmarshal([]byte(dataStr), &data)
 			}
-			Generate(toPath, templatePath, data, nil)
-			return nil
+			return Generate(toPath, templatePath, data, nil)
 		},
 	}
 }
