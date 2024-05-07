@@ -86,12 +86,45 @@ func GetSchemas(name string) (*Schema, error) {
 	return schemas, nil
 }
 
-// Generate generates code by template
+func GetSchemaByPath(schemaDir string) (*Schema, error) {
+	schemaPath := filepath.Join(schemaDir, SchemaFileName)
+	exist := CheckPathExists(schemaPath)
+	if !exist {
+		return nil, fmt.Errorf("schema is not found in [%s]", schemaPath)
+	}
+	schemas, err := ReadSchema(schemaPath)
+	if err != nil {
+		return nil, err
+	}
+	return schemas, nil
+}
+
+// Generate generates code by template name
 func Generate(toPath, name string, data map[string]interface{}, driver *Schema) error {
 	config := GetConfig()
 	fromPath := filepath.Join(config.TemplatePath, name)
+	return GenerateByPath(toPath, fromPath, data, driver)
+}
+
+// Generate generates code by template path
+func GenerateByPath(toPath, fromPath string, data map[string]interface{}, driver *Schema) error {
+	var config *Config
+	if driver == nil {
+		schema, err := GetSchemaByPath(fromPath)
+		if err != nil {
+			return err
+		}
+		driver = schema
+	}
+	config = driver.Config
+	baseConfig := GetConfig()
+	if config == nil {
+		config = baseConfig
+	} else {
+		config.Merge(baseConfig)
+	}
 	if !CheckPathExists(fromPath) {
-		return fmt.Errorf("template is not exist [%s]", name)
+		return fmt.Errorf("template is not exist in [%s]", fromPath)
 	}
 	return CopyDirWithFunc(fromPath, toPath, func(s string) string {
 		t := fasttemplate.New(s, config.FileNameTag, config.FileNameTag)

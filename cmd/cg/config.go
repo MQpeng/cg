@@ -31,6 +31,28 @@ type Config struct {
 	Version      string `json:"version"`
 }
 
+// merge config
+func (c Config) Merge(baseConf *Config) {
+	if c.TemplatePath == "" {
+		c.TemplatePath = baseConf.TemplatePath
+	}
+	if c.FileNameTag == "" {
+		c.FileNameTag = baseConf.FileNameTag
+	}
+	if c.FileStartTag == "" {
+		c.FileStartTag = baseConf.FileStartTag
+	}
+	if c.FileEndTag == "" {
+		c.FileEndTag = baseConf.FileEndTag
+	}
+	if c.Driver == "" {
+		c.Driver = baseConf.Driver
+	}
+	if c.Version == "" {
+		c.Version = baseConf.Version
+	}
+}
+
 // Schema schema.json
 type Schema struct {
 	Name         string   `json:"name"`
@@ -40,6 +62,7 @@ type Schema struct {
 	FileStartTag string   `json:"fileStartTag"`
 	FileEndTag   string   `json:"fileEndTag"`
 	Flags        []Flag   `json:"flags"`
+	Config       *Config  `json:"config,omitempty"`
 }
 
 // Flag flag
