@@ -184,6 +184,9 @@ func BuildGenerateCmd() cli.Command {
 						}
 						data[name] = rawData
 						continue
+					case "query":
+						data[name] = QueryParse(val)
+						continue
 					case "json":
 						file, err := os.Open(val)
 						if err != nil {
@@ -253,7 +256,7 @@ func BuildGenerateCmd() cli.Command {
 				Usage: "the path of target dir",
 			},
 			&cli.StringFlag{
-				Name:  "raw",
+				Name:  "params",
 				Usage: "the template variable data",
 			},
 		},
@@ -270,11 +273,9 @@ func BuildGenerateCmd() cli.Command {
 				}
 				toPath = dir
 			}
-			dataStr := ctx.String("raw")
-			data := make(map[string]interface{})
-			if dataStr != "" {
-				json.Unmarshal([]byte(dataStr), &data)
-			}
+			queryStr := ctx.String("params")
+			data := QueryParse(queryStr)
+			fmt.Println(data)
 			return GenerateByPath(toPath, templatePath, data, nil)
 		},
 	}

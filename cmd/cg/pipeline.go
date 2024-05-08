@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/url"
 	"strings"
 )
 
@@ -142,12 +143,12 @@ func In(m map[string]interface{}, char string) bool {
 }
 
 // Get get value
-func Get(char string, m map[string]interface{}, ) interface{} {
+func Get(char string, m map[string]interface{}) interface{} {
 	return m[char]
 }
 
 // GetStr get str
-func GetStr(char string, m map[string]interface{}, ) string {
+func GetStr(char string, m map[string]interface{}) string {
 	if m[char] == nil {
 		return ""
 	}
@@ -159,7 +160,7 @@ func LastStr(s []string) string {
 	if len(s) == 0 {
 		return ""
 	}
-	return s[len(s) - 1]
+	return s[len(s)-1]
 }
 
 // SchemaToTsType return Typescript type
@@ -168,26 +169,44 @@ func SchemaToTsType(ss interface{}) string {
 		return ""
 	}
 	s := ss.(map[string]interface{})
-	switch(s["type"]) {
-    case "object":
-        return "any"
-    case "array":
-        return SchemaToTsType(s["items"]) + "[]"
-    case "integer":
-        return "number"
-    }
-    if s["anyOf"] != nil && len(s["anyOf"].([]interface{})) > 0 {
-        var types []string
-        for _, v := range s["anyOf"].([]interface{}) {
-            types = append(types, SchemaToTsType(v))
-        }
-        return strings.Join(types, " | ")
-    }
+	switch s["type"] {
+	case "object":
+		return "any"
+	case "array":
+		return SchemaToTsType(s["items"]) + "[]"
+	case "integer":
+		return "number"
+	}
+	if s["anyOf"] != nil && len(s["anyOf"].([]interface{})) > 0 {
+		var types []string
+		for _, v := range s["anyOf"].([]interface{}) {
+			types = append(types, SchemaToTsType(v))
+		}
+		return strings.Join(types, " | ")
+	}
 	if In(s, "$ref") {
-		return LastStr(SplitBy("/",s["$ref"].(string)))
+		return LastStr(SplitBy("/", s["$ref"].(string)))
 	}
 	if s["type"] == nil {
 		return ""
 	}
-    return s["type"].(string)
+	return s["type"].(string)
+}
+
+func QueryParse(queryStr string) map[string]interface{} {
+	data := make(map[string]interface{})
+	if queryStr != "" {
+		values, err := url.ParseQuery(queryStr)
+		if err != nil {
+			return data
+		}
+		for name, val := range values {
+			if len(val) == 1 {
+				data[name] = val[0]
+			} else {
+				data[name] = val
+			}
+		}
+	}
+	return data
 }
