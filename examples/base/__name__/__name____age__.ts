@@ -1,1 +1,1 @@
-export const {{age}} = 13
+export const {{name}}{{age}} = 13
