@@ -275,7 +275,6 @@ func BuildGenerateCmd() cli.Command {
 			}
 			queryStr := ctx.String("params")
 			data := QueryParse(queryStr)
-			fmt.Println(data)
 			return GenerateByPath(toPath, templatePath, data, nil)
 		},
 	}
