@@ -253,7 +253,7 @@ func BuildGenerateCmd() cli.Command {
 				Usage: "the path of target dir",
 			},
 			&cli.StringFlag{
-				Name:  "data",
+				Name:  "raw",
 				Usage: "the template variable data",
 			},
 		},
@@ -270,7 +270,7 @@ func BuildGenerateCmd() cli.Command {
 				}
 				toPath = dir
 			}
-			dataStr := ctx.String("data")
+			dataStr := ctx.String("raw")
 			data := make(map[string]interface{})
 			if dataStr != "" {
 				json.Unmarshal([]byte(dataStr), &data)

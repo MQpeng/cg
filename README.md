@@ -41,8 +41,8 @@ cg g test --name Job --age 44
 
 ```shell
 # use template to generate
-cg g --template=examples/base --data="{'name': 'Tom', 'age': 12}"
-cg g --template=examples/test --data="{'name': 'Tom', 'age': 12}"
+cg g --template=examples/base --name Tom --age 12
+cg g --template=examples/test --name Tom --age 12
 ```
 
 ## Use `git`
