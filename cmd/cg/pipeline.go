@@ -193,6 +193,7 @@ func SchemaToTsType(ss interface{}) string {
 	return s["type"].(string)
 }
 
+// Parse query string
 func QueryParse(queryStr string) map[string]interface{} {
 	data := make(map[string]interface{})
 	if queryStr != "" {
