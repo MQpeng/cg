@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/getkin/kin-openapi v0.121.0
 	github.com/go-resty/resty/v2 v2.10.0
+	github.com/magiconair/properties v1.8.7
 	github.com/urfave/cli/v2 v2.25.7
 	github.com/valyala/fasttemplate v1.2.2
 )
