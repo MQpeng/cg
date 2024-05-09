@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"reflect"
 	"regexp"
@@ -268,6 +269,12 @@ func BuildGenerateCmd() cli.Command {
 			toPath := ctx.String("path")
 			if toPath == "" {
 				dir, err := os.Getwd()
+				if err != nil {
+					return err
+				}
+				toPath = dir
+			} else if !path.IsAbs(toPath) {
+				dir, err := filepath.Abs(toPath)
 				if err != nil {
 					return err
 				}

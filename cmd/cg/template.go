@@ -126,7 +126,7 @@ func GenerateByPath(toPath, fromPath string, data map[string]interface{}, driver
 	if !CheckPathExists(fromPath) {
 		return fmt.Errorf("template is not exist in [%s]", fromPath)
 	}
-	return CopyDirWithFunc(fromPath, toPath, func(s string) string {
+	err := CopyDirWithFunc(fromPath, toPath, func(s string) string {
 		t := fasttemplate.New(s, config.FileNameTag, config.FileNameTag)
 		return t.ExecuteString(data)
 	}, func(dst io.Writer, src io.Reader) (written int64, err error) {
@@ -152,6 +152,11 @@ func GenerateByPath(toPath, fromPath string, data map[string]interface{}, driver
 	}, func(path string) bool {
 		return path == SchemaFileName
 	})
+	if err != nil {
+		return err
+	}
+	fmt.Println(fmt.Sprintf("✅ template \"%v\" generated in %v", driver.Name, toPath))
+	return nil
 }
 
 // Test would check path is correct template
