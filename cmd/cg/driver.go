@@ -46,15 +46,21 @@ func TextTemplate(content string, data map[string]interface{}, config *Config) i
 		"QueryParse":     QueryParse,
 		"SchemaToTsType": SchemaToTsType,
 		// strcase
-		"ToSnake":              strcase.ToSnake,
-		"ToSnakeWithIgnore":    strcase.ToSnakeWithIgnore,
-		"ToScreamingSnake":     strcase.ToScreamingSnake,
-		"ToKebab":              strcase.ToKebab,
-		"ToScreamingKebab":     strcase.ToScreamingKebab,
-		"ToDelimited":          strcase.ToDelimited,
-		"ToScreamingDelimited": strcase.ToScreamingDelimited,
-		"ToCamel":              strcase.ToCamel,
-		"ToLowerCamel":         strcase.ToLowerCamel,
+		"ToSnake": strcase.ToSnake,
+		"ToSnakeWithIgnore": func(ignore, s string) string {
+			return strcase.ToSnakeWithIgnore(s, ignore)
+		},
+		"ToScreamingSnake": strcase.ToScreamingSnake,
+		"ToKebab":          strcase.ToKebab,
+		"ToScreamingKebab": strcase.ToScreamingKebab,
+		"ToDelimited": func(d uint8, s string) string {
+			return strcase.ToDelimited(s, d)
+		},
+		"ToScreamingDelimited": func(delimiter uint8, ignore string, screaming bool, s string) string {
+			return strcase.ToScreamingDelimited(s, delimiter, ignore, screaming)
+		},
+		"ToCamel":      strcase.ToCamel,
+		"ToLowerCamel": strcase.ToLowerCamel,
 	}
 	tmpl, err := template.New(AppName).Funcs(funcMap).Delims(config.FileStartTag, config.FileEndTag).Parse(content)
 	if err != nil {
