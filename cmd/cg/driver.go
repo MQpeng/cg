@@ -5,6 +5,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/iancoleman/strcase"
 	"github.com/valyala/fasttemplate"
 )
 
@@ -16,6 +17,7 @@ func FastTemplate(content string, data map[string]interface{}, config *Config) i
 
 // TextTemplate is driver by text/template
 func TextTemplate(content string, data map[string]interface{}, config *Config) io.Reader {
+
 	funcMap := template.FuncMap{
 		// String operator pipeline
 		"ToUpper":       strings.ToUpper,
@@ -43,6 +45,16 @@ func TextTemplate(content string, data map[string]interface{}, config *Config) i
 		"GetRouteParams": GetRouteParams,
 		"QueryParse":     QueryParse,
 		"SchemaToTsType": SchemaToTsType,
+		// strcase
+		"ToSnake":              strcase.ToSnake,
+		"ToSnakeWithIgnore":    strcase.ToSnakeWithIgnore,
+		"ToScreamingSnake":     strcase.ToScreamingSnake,
+		"ToKebab":              strcase.ToKebab,
+		"ToScreamingKebab":     strcase.ToScreamingKebab,
+		"ToDelimited":          strcase.ToDelimited,
+		"ToScreamingDelimited": strcase.ToScreamingDelimited,
+		"ToCamel":              strcase.ToCamel,
+		"ToLowerCamel":         strcase.ToLowerCamel,
 	}
 	tmpl, err := template.New(AppName).Funcs(funcMap).Delims(config.FileStartTag, config.FileEndTag).Parse(content)
 	if err != nil {
