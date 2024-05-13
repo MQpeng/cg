@@ -26,5 +26,9 @@
     "@tonyer/cg-win32-amd64": "0.0.7",
     "@tonyer/cg-win32-arm64": "0.0.7"
   },
-  "license": "MIT"
+  "author": "bean",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/MQpeng/cg/issues"
+	}
 }
