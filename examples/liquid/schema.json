@@ -1,0 +1,23 @@
+{
+    "name": "liquid",
+    "alias": [
+        "l"
+    ],
+    "description": "cg example with liquid driver",
+    "driver": "liquid",
+    "flags": [
+        {
+            "name": "name",
+            "alias": [
+                "n"
+            ],
+            "require": true,
+            "description": "the var name"
+        },
+        {
+            "name": "age",
+            "default": "12",
+            "description": "the var age"
+        }
+    ]
+}
