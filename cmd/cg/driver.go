@@ -6,6 +6,7 @@ import (
 	"text/template"
 
 	"github.com/iancoleman/strcase"
+	"github.com/osteele/liquid"
 	"github.com/valyala/fasttemplate"
 )
 
@@ -75,4 +76,13 @@ func TextTemplate(content string, data map[string]interface{}, config *Config) i
 		}
 	}()
 	return reader
+}
+
+func LiquidTemplate(content string, data map[string]interface{}, config *Config) io.Reader {
+	engine := liquid.NewEngine()
+	out, err := engine.ParseAndRenderString(content, data)
+	if err != nil {
+		panic(err)
+	}
+	return strings.NewReader(out)
 }
