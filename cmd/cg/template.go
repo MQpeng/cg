@@ -145,6 +145,8 @@ func GenerateByPath(toPath, fromPath string, data map[string]interface{}, driver
 			return io.Copy(dst, TextTemplate(content, data, config))
 		case "liquid":
 			return io.Copy(dst, LiquidTemplate(content, data, config))
+		case "pongo2":
+			return io.Copy(dst, Pongo2Template(content, data, config))
 		case "fasttemplate":
 			return io.Copy(dst, FastTemplate(content, data, config))
 		default:

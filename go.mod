@@ -12,6 +12,7 @@ require (
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
+	github.com/flosch/pongo2/v6 v6.0.0 // indirect
 	github.com/go-openapi/jsonpointer v0.20.0 // indirect
 	github.com/go-openapi/swag v0.22.4 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect

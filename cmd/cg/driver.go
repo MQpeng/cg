@@ -5,6 +5,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/flosch/pongo2/v6"
 	"github.com/iancoleman/strcase"
 	"github.com/osteele/liquid"
 	"github.com/valyala/fasttemplate"
@@ -78,9 +79,23 @@ func TextTemplate(content string, data map[string]interface{}, config *Config) i
 	return reader
 }
 
+// LiquidTemplate is driver by liquid
 func LiquidTemplate(content string, data map[string]interface{}, config *Config) io.Reader {
 	engine := liquid.NewEngine()
 	out, err := engine.ParseAndRenderString(content, data)
+	if err != nil {
+		panic(err)
+	}
+	return strings.NewReader(out)
+}
+
+// Pongo2Template is driver by pongo2
+func Pongo2Template(content string, data map[string]interface{}, config *Config) io.Reader {
+	tpl, err := pongo2.FromString(content)
+	if err != nil {
+		panic(err)
+	}
+	out, err := tpl.Execute(data)
 	if err != nil {
 		panic(err)
 	}
