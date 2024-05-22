@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -260,6 +261,10 @@ func BuildGenerateCmd() cli.Command {
 				Name:  "params",
 				Usage: "the template variable data",
 			},
+			&cli.PathFlag{
+				Name:  "json",
+				Usage: "the template variable data",
+			},
 		},
 		Action: func(ctx *cli.Context) error {
 			templatePath := ctx.String("template")
@@ -281,7 +286,28 @@ func BuildGenerateCmd() cli.Command {
 				toPath = dir
 			}
 			queryStr := ctx.String("params")
-			data := QueryParse(queryStr)
+			jsonPath := ctx.String("json")
+			var data map[string]interface{}
+			if queryStr != "" {
+				data = QueryParse(queryStr)
+			} else if jsonPath != "" {
+				file, err := os.Open(jsonPath)
+				if err != nil {
+					return err
+				}
+				defer file.Close()
+
+				jsonBytes, err := io.ReadAll(file)
+				if err != nil {
+					return err
+				}
+				err = json.Unmarshal(jsonBytes, &data)
+				if err != nil {
+					return err
+				}
+			} else {
+				return errors.New(fmt.Sprintf("flag: [%s] or [%s] is required", "params", "json"))
+			}
 			return GenerateByPath(toPath, templatePath, data, nil)
 		},
 	}
