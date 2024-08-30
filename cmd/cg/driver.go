@@ -9,6 +9,8 @@ import (
 	"github.com/iancoleman/strcase"
 	"github.com/osteele/liquid"
 	"github.com/valyala/fasttemplate"
+
+	"github.com/samber/lo"
 )
 
 // FastTemplate is driver by fasttemplate
@@ -63,6 +65,18 @@ func TextTemplate(content string, data map[string]interface{}, config *Config) i
 		},
 		"ToCamel":      strcase.ToCamel,
 		"ToLowerCamel": strcase.ToLowerCamel,
+
+		// lo pipeline
+		"RandomString": lo.RandomString,
+		"Substring":    lo.Substring[string],
+		"ChunkString":  lo.ChunkString[string],
+		"RuneLength":   lo.RuneLength,
+		"PascalCase":   lo.PascalCase,
+		"CamelCase":    lo.CamelCase,
+		"KebabCase":    lo.KebabCase,
+		"SnakeCase":    lo.SnakeCase,
+		"Words":        lo.Words,
+		"Capitalize":   lo.Capitalize,
 	}
 	tmpl, err := template.New(AppName).Funcs(funcMap).Delims(config.FileStartTag, config.FileEndTag).Parse(content)
 	if err != nil {
