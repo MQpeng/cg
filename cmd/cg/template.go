@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/valyala/fasttemplate"
 )
@@ -126,9 +127,11 @@ func GenerateByPath(toPath, fromPath string, data map[string]interface{}, driver
 	if !CheckPathExists(fromPath) {
 		return fmt.Errorf("template is not exist in [%s]", fromPath)
 	}
+	re := regexp.MustCompile(`\.go\.txt|\.go\.tpl|\.go\.tmpl|\.gtpl$`)
 	err := CopyDirWithFunc(fromPath, toPath, func(s string) string {
 		t := fasttemplate.New(s, config.FileNameTag, config.FileNameTag)
-		return t.ExecuteString(data)
+		fileName := t.ExecuteString(data)
+		return re.ReplaceAllString(fileName, "");
 	}, func(dst io.Writer, src io.Reader) (written int64, err error) {
 		reader := bufio.NewReader(src)
 		var content string
