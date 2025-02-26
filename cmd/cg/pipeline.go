@@ -136,6 +136,16 @@ func Contains(arr []interface{}, char string) bool {
 	return false
 }
 
+// At get element by offset
+func At(slice []interface{}, offset int) bool {
+	length := len(slice)
+    if length == 0 {
+        return nil
+    }
+    offset = (offset % length + length) % length
+    return slice[offset]
+}
+
 // In check key in map
 func In(m map[string]interface{}, char string) bool {
 	_, ok := m[char]
