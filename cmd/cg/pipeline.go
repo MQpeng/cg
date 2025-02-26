@@ -137,7 +137,7 @@ func Contains(arr []interface{}, char string) bool {
 }
 
 // At get element by offset
-func At(slice []interface{}, offset int) bool {
+func At(slice []interface{}, offset int) interface{} {
 	length := len(slice)
     if length == 0 {
         return nil
