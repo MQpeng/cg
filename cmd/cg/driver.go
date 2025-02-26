@@ -43,6 +43,7 @@ func TextTemplate(content string, data map[string]interface{}, config *Config) i
 		"Distinct":           Distinct,
 		// Collection operator pipeline
 		"In":     In,
+		"At": At,
 		"Get":    Get,
 		"GetStr": GetStr,
 		// Instrumental operator pipeline
