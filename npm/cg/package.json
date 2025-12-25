@@ -17,7 +17,7 @@
     "cg": "bin/cg"
   },
   "optionalDependencies": {
-    "@tonyer/cg-darwin-x64": "0.0.7",
+    "@tonyer/cg-darwin-amd64": "0.0.7",
     "@tonyer/cg-darwin-arm64": "0.0.7",
     "@tonyer/cg-linux-386": "0.0.7",
     "@tonyer/cg-linux-amd64": "0.0.7",
